@@ -17,17 +17,23 @@ from utils.preprocessor import preprocess_input
 import wandb
 from wandb.wandb_keras import WandbKerasCallback
 
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("--patience", type=int, default=50)
+parser.add_argument("--rotation_range", type=int, default=10)
+parser.add_argument("--width_shift_range", type=float, default=0.1)
+parser.add_argument("--height_shift_range", type=float, default=0.1)
+parser.add_argument("--zoom_range", type=float, default=0.1)
+parser.add_argument("--batch_size", type=int, default=32)
+parser.add_argument("--num_epochs", type=int, default=10000)
+
+args = parser.parse_args()
+
+
+
 run = wandb.init()
 config = run.config
-
-# hyperparameters
-config.patience = 50
-config.rotation_range = 10
-config.width_shift_range = 0.1
-config.height_shift_range = 0.1
-config.zoom_range = 0.1
-config.batch_size = 32
-config.num_epochs = 10000
+config.update(args)
 
 input_shape = (64, 64, 1)
 validation_split = .2
