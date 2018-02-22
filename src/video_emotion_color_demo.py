@@ -31,13 +31,21 @@ emotion_target_size = emotion_classifier.input_shape[1:3]
 # starting lists for calculating modes
 emotion_window = []
 
+
+import urllib.request
 # starting video streaming
 cv2.namedWindow('window_frame')
 video_capture = cv2.VideoCapture(0)
 while True:
-    bgr_image = video_capture.read()[1]
-    gray_image = cv2.cvtColor(bgr_image, cv2.COLOR_BGR2GRAY)
-    rgb_image = cv2.cvtColor(bgr_image, cv2.COLOR_BGR2RGB)
+    req = urllib.request.urlopen('http://charlie.local/cam.jpg')
+    arr = np.asarray(bytearray(req.read()), dtype=np.uint8)
+    img = cv2.imdecode(arr, -1)
+    #bgr_image = video_capture.read()[1]
+    #    gray_image = cv2.cvtColor(bgr_image, cv2.COLOR_BGR2GRAY)
+    #     rgb_image = cv2.cvtColor(bgr_image, cv2.COLOR_BGR2RGB)
+    rgb_image = img
+    gray_image = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+
     faces = detect_faces(face_detection, gray_image)
 
     for face_coordinates in faces:
